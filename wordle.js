@@ -5777,9 +5777,9 @@ document.querySelector('button').addEventListener('click', () => {
 
 
 let r = /[a-z]/;
-window.addEventListener('keydown', (e) => {
+const onletter = (key) => {
 
-    if (e.key === 'Backspace') {
+    if (key === 'Backspace' || key === undefined) {
         if (typedword.length === 0) {
             return;
         }
@@ -5789,7 +5789,7 @@ window.addEventListener('keydown', (e) => {
             container.children[row].children[letter].textContent = '';
         }
     }
-    if (e.key === 'Enter') {
+    if (key === 'Enter' || key === 'ENTER') {
         if (row === 6) {
             return;
         }
@@ -5797,20 +5797,29 @@ window.addEventListener('keydown', (e) => {
             return;
         } else {
             if (list.includes(typedword.join(''))) {
-                let array = []
+                let array = [];
                 for (let i = 0; i < 5; i++) {
                     if (typedword[i] === word[i]) {
+                        container.children[row].children[i].style.transform = 'rotateY(180deg)';
+                        container.children[row].children[i].children[0].style.transform = 'rotateY(180deg)';
                         container.children[row].children[i].style.background = 'green';
+                        document.getElementsByClassName(typedword[i])[0].style.background = 'green';
                         array.push('g');
                     } else if (word.includes(typedword[i]) && typedword.slice(0, i).includes(typedword[i]) === false) {
+                        container.children[row].children[i].style.transform = 'rotateY(180deg)';
+                        container.children[row].children[i].children[0].style.transform = 'rotateY(180deg)';
                         container.children[row].children[i].style.background = 'orange';
+                        document.getElementsByClassName(typedword[i])[0].style.background = 'orange';
                     } else {
-                        container.children[row].children[i].style.background = 'gray';
+                        container.children[row].children[i].style.transform = 'rotateY(180deg)';
+                        container.children[row].children[i].children[0].style.transform = 'rotateY(180deg)';
+                        container.children[row].children[i].style.background = '#6e6d6a';
+                        document.getElementsByClassName(typedword[i])[0].style.background = '#6e6d6a';
                     }
                 }
                 if (array.length === 5) {
                     document.getElementById('end').style.display = 'flex';
-                    document.getElementById('endp').textContent = 'Congratulations!';
+                    document.getElementById('endp').textContent = 'Congratulations! Word was ' + word;
                 }
                 row++;
                 letter = 0;
@@ -5833,7 +5842,7 @@ window.addEventListener('keydown', (e) => {
                 }, 800);
             }
         }
-    } else if (e.key.length === 1 && r.test(e.key)) {
+    } else if (key.length === 1 && r.test(key)) {
         if (row === 6) {
             return;
         }
@@ -5841,12 +5850,80 @@ window.addEventListener('keydown', (e) => {
             return;
         } else {
             if (typedword.length === 0) {
-                typedword.push(e.key);
+                typedword.push(key);
             } else {
-                typedword.push(e.key);
+                typedword.push(key);
             }
-            container.children[row].children[letter].textContent = typedword[letter].toLowerCase();
+            container.children[row].children[letter].innerHTML = `<p>${typedword[letter].toLowerCase()}</p>`;
             letter++;
         }
     } else return;
+}
+
+window.addEventListener('keydown', (e) => onletter(e.key));
+
+//keyboard
+const keyboard = document.getElementById('keyboard');
+const rowtop = document.querySelector('.rowtop');
+const rowmid = document.querySelector('.rowmid');
+const rowbot = document.querySelector('.rowbot');
+ 
+let keytop = 'qwertyuiop';
+let keymid = 'asdfghjkl';
+let keybot = ['ENTER', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
+
+for (let i = 0; i < keytop.length; i++) {
+    let key = document.createElement('div');
+    key.textContent = keytop[i];
+    key.classList.add('key');
+    key.classList.add('hover');
+    key.classList.add(keytop[i]);
+    rowtop.append(key);
+}
+for (let i = 0; i < keymid.length; i++) {
+    let key = document.createElement('div');
+    key.textContent = keymid[i];
+    key.classList.add('key');
+    key.classList.add('hover');
+    key.classList.add(keymid[i]);
+    rowmid.append(key);
+}
+for (let i = 0; i < keybot.length + 1; i++) {
+    let key = document.createElement('div');
+    if (i === keybot.length) {
+        key.innerHTML = '<i class="fa-solid fa-delete-left"></i>';
+    } else {
+        key.textContent = keybot[i];
+    }
+    key.classList.add('key');
+    key.classList.add('hover');
+    key.classList.add(keybot[i]);
+    rowbot.append(key);
+}
+
+document.querySelectorAll('.key').forEach(key => {
+    key.addEventListener('click', (e) => {
+        onletter(e.target.classList[2]);
+    })
+})
+
+const mode = document.getElementById('mode');
+
+mode.addEventListener('click', () => {
+    document.querySelector('.mode_ball').classList.toggle('moderight');
+    if (document.querySelector('.mode_ball').classList[1] === 'moderight') {
+        document.body.style.background = '#282928';
+        document.querySelector('h1').style.color = 'white';
+        document.querySelectorAll('.fa-solid').forEach(fa => {
+            fa.style.color = 'white';
+        });
+        mode.style.border = '2px solid white';
+    } else {
+        document.body.style.background = 'white';
+        document.querySelector('h1').style.color = 'black';
+        document.querySelectorAll('.moonsun').forEach(fa => {
+            fa.style.color = 'black';
+        });
+        mode.style.border = '2px solid black';
+    }
 })
