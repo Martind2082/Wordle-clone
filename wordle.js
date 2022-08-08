@@ -5778,8 +5778,9 @@ document.querySelector('button').addEventListener('click', () => {
 
 let r = /[a-z]/;
 const onletter = (key) => {
+    console.log(key, typeof(key), key.length)
 
-    if (key === 'Backspace' || key === undefined) {
+    if (key === 'Backspace') {
         if (typedword.length === 0) {
             return;
         }
@@ -5890,14 +5891,15 @@ for (let i = 0; i < keymid.length; i++) {
 }
 for (let i = 0; i < keybot.length + 1; i++) {
     let key = document.createElement('div');
-    if (i === keybot.length) {
-        key.innerHTML = '<i class="fa-solid fa-delete-left"></i>';
-    } else {
-        key.textContent = keybot[i];
-    }
     key.classList.add('key');
     key.classList.add('hover');
-    key.classList.add(keybot[i]);
+    if (i === keybot.length) {
+        key.innerHTML = '<i class="fa-solid fa-delete-left Backspace"></i>';
+        key.classList.add('Backspace');
+    } else {
+        key.textContent = keybot[i];
+        key.classList.add(keybot[i]);
+    }
     rowbot.append(key);
 }
 
