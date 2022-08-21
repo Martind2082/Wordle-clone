@@ -5763,22 +5763,33 @@ const list = [
 
 
 
-const word = list[Math.floor(Math.random() * list.length)].toString().toLowerCase();
+let word = list[Math.floor(Math.random() * list.length)].toString().toLowerCase();
 
-const container = document.querySelector('.container');
+let container = document.querySelector('.container');
 
 let row = 0;
 let letter = 0;
 let typedword = [];
 
 document.querySelector('button').addEventListener('click', () => {
-    location.reload();
+    word = list[Math.floor(Math.random() * list.length)].toString().toLowerCase();
+    row = 0;
+    letter = 0;
+    typedword = [];
+    document.querySelectorAll('.letter').forEach(letter => {
+        letter.removeChild(letter.children[0]);
+        letter.style.transform = 'rotateY(0deg)';
+        letter.style.backgroundColor = 'white';
+    })
+    document.getElementById('end').style.display = 'none';
+    document.querySelectorAll('.key').forEach(key => {
+        key.style.backgroundColor = 'rgb(181, 177, 177)';
+    })
 })
 
 
 let r = /[a-z]/;
 const onletter = (key) => {
-    console.log(key, typeof(key), key.length)
 
     if (key === 'Backspace') {
         if (typedword.length === 0) {
@@ -5819,15 +5830,20 @@ const onletter = (key) => {
                     }
                 }
                 if (array.length === 5) {
-                    document.getElementById('end').style.display = 'flex';
-                    document.getElementById('endp').textContent = 'Congratulations! Word was ' + word;
+                    setTimeout(() => {
+                        document.getElementById('end').style.display = 'flex';
+                        document.getElementById('endp').textContent = 'Congratulations! Word was ' + word;
+                    }, 1000);
+                    return;
                 }
                 row++;
                 letter = 0;
                 typedword = [];
                 if (row === 6 && getComputedStyle(document.getElementById('end')).display === 'none') {
-                    document.getElementById('end').style.display = 'flex';
-                    document.getElementById('endp').textContent = 'Word was ' + word;
+                    setTimeout(() => {
+                        document.getElementById('end').style.display = 'flex';
+                        document.getElementById('endp').textContent = 'Word was ' + word;
+                    }, 1000);
                 }
             } else {
                 let popup = document.createElement('div');
