@@ -5764,7 +5764,7 @@ const list = [
 
 
 let word = list[Math.floor(Math.random() * list.length)].toString().toLowerCase();
-
+console.log(word);
 let container = document.querySelector('.container');
 
 let row = 0;
@@ -5773,13 +5773,16 @@ let typedword = [];
 
 document.querySelector('button').addEventListener('click', () => {
     word = list[Math.floor(Math.random() * list.length)].toString().toLowerCase();
+    console.log(word);
     row = 0;
     letter = 0;
     typedword = [];
     document.querySelectorAll('.letter').forEach(letter => {
-        letter.removeChild(letter.children[0]);
-        letter.style.transform = 'rotateY(0deg)';
-        letter.style.backgroundColor = 'white';
+        if (letter.children[0]) {
+            letter.children[0].remove();
+            letter.style.transform = 'rotateY(0deg)';
+            letter.style.backgroundColor = 'rgb(181, 177, 177)';
+        }
     })
     document.getElementById('end').style.display = 'none';
     document.querySelectorAll('.key').forEach(key => {
