@@ -5764,16 +5764,18 @@ const list = [
 
 
 let word = list[Math.floor(Math.random() * list.length)].toString().toLowerCase();
-console.log(word);
 let container = document.querySelector('.container');
 
 let row = 0;
 let letter = 0;
+//user's guess
 let typedword = [];
 
+let gamefinished = false;
+
 document.querySelector('button').addEventListener('click', () => {
+    gamefinished = false;
     word = list[Math.floor(Math.random() * list.length)].toString().toLowerCase();
-    console.log(word);
     row = 0;
     letter = 0;
     typedword = [];
@@ -5805,10 +5807,7 @@ const onletter = (key) => {
         }
     }
     if (key === 'Enter' || key === 'ENTER') {
-        if (row === 6) {
-            return;
-        }
-        if (container.children[row].children[4].textContent === '') {
+        if (container.children[row].children[4].textContent === '' || row === 6 || gamefinished) {
             return;
         } else {
             if (list.includes(typedword.join(''))) {
@@ -5831,11 +5830,15 @@ const onletter = (key) => {
                         container.children[row].children[i].style.background = '#6e6d6a';
                         document.getElementsByClassName(typedword[i])[0].style.background = '#6e6d6a';
                     }
+                    if (array.length === 5) {
+                        gamefinished = true;
+                    }
                 }
                 if (array.length === 5) {
                     setTimeout(() => {
                         document.getElementById('end').style.display = 'flex';
                         document.getElementById('endp').textContent = 'Congratulations! Word was ' + word;
+                        gamefinished = true;
                     }, 1000);
                     return;
                 }
@@ -5846,6 +5849,7 @@ const onletter = (key) => {
                     setTimeout(() => {
                         document.getElementById('end').style.display = 'flex';
                         document.getElementById('endp').textContent = 'Word was ' + word;
+                        gamefinished = true;
                     }, 1000);
                 }
             } else {
