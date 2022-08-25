@@ -5762,8 +5762,33 @@ const list = [
   ]
 
 
+let word;
+if (!localStorage.getItem('word')) {
+    word = list[Math.floor(Math.random() * list.length)].toString().toLowerCase();
+    localStorage.setItem('word', word);
+} else {
+    word = localStorage.getItem('word');
+}
 
-let word = list[Math.floor(Math.random() * list.length)].toString().toLowerCase();
+if (!localStorage.getItem('guess0')) {
+    localStorage.setItem('guess0', []);
+}
+if (!localStorage.getItem('guess1')) {
+    localStorage.setItem('guess1', []);
+}
+if (!localStorage.getItem('guess2')) {
+    localStorage.setItem('guess2', []);
+}
+if (!localStorage.getItem('guess3')) {
+    localStorage.setItem('guess3', []);
+}
+if (!localStorage.getItem('guess4')) {
+    localStorage.setItem('guess4', []);
+}
+if (!localStorage.getItem('guess5')) {
+    localStorage.setItem('guess5', []);
+}
+
 let container = document.querySelector('.container');
 
 let row = 0;
@@ -5776,6 +5801,7 @@ let gamefinished = false;
 document.querySelector('button').addEventListener('click', () => {
     gamefinished = false;
     word = list[Math.floor(Math.random() * list.length)].toString().toLowerCase();
+    localStorage.setItem('word', word);
     row = 0;
     letter = 0;
     typedword = [];
@@ -5791,6 +5817,29 @@ document.querySelector('button').addEventListener('click', () => {
         key.style.backgroundColor = 'rgb(181, 177, 177)';
     })
 })
+
+// if (localStorage.getItem('guess0').length !== 0) {
+//     for (let j = 0; j < 5; j++) {
+//         for (let i = 0; i < 5; i++) {
+//             if (localStorage.getItem('guess' + i) === word[i]) {
+//                 container.children[j].children[i].style.transform = 'rotateY(180deg)';
+//                 container.children[j].children[i].children[0].style.transform = 'rotateY(180deg)';
+//                 container.children[j].children[i].style.background = 'green';
+//                 document.getElementsByClassName(typedword[i])[0].style.background = 'green';
+//             } else if (word.includes(typedword[i]) && typedword.slice(0, i).includes(typedword[i]) === false) {
+//                 container.children[j].children[i].style.transform = 'rotateY(180deg)';
+//                 container.children[j].children[i].children[0].style.transform = 'rotateY(180deg)';
+//                 container.children[j].children[i].style.background = 'orange';
+//                 document.getElementsByClassName(typedword[i])[0].style.background = 'orange';
+//             } else {
+//                 container.children[j].children[i].style.transform = 'rotateY(180deg)';
+//                 container.children[j].children[i].children[0].style.transform = 'rotateY(180deg)';
+//                 container.children[j].children[i].style.background = '#6e6d6a';
+//                 document.getElementsByClassName(typedword[i])[0].style.background = '#6e6d6a';
+//             }
+//         }
+//     }
+// }
 
 
 let r = /[a-z]/;
@@ -5834,6 +5883,7 @@ const onletter = (key) => {
                         gamefinished = true;
                     }
                 }
+                localStorage.setItem('guess' + row, typedword.join(''));
                 if (array.length === 5) {
                     setTimeout(() => {
                         document.getElementById('end').style.display = 'flex';
