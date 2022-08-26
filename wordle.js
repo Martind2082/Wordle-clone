@@ -5798,6 +5798,46 @@ let typedword = [];
 
 let gamefinished = false;
 
+//keyboard
+const keyboard = document.getElementById('keyboard');
+const rowtop = document.querySelector('.rowtop');
+const rowmid = document.querySelector('.rowmid');
+const rowbot = document.querySelector('.rowbot');
+ 
+let keytop = 'qwertyuiop';
+let keymid = 'asdfghjkl';
+let keybot = ['ENTER', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
+
+for (let i = 0; i < keytop.length; i++) {
+    let key = document.createElement('div');
+    key.textContent = keytop[i];
+    key.classList.add('key');
+    key.classList.add('hover');
+    key.classList.add(keytop[i]);
+    rowtop.append(key);
+}
+for (let i = 0; i < keymid.length; i++) {
+    let key = document.createElement('div');
+    key.textContent = keymid[i];
+    key.classList.add('key');
+    key.classList.add('hover');
+    key.classList.add(keymid[i]);
+    rowmid.append(key);
+}
+for (let i = 0; i < keybot.length + 1; i++) {
+    let key = document.createElement('div');
+    key.classList.add('key');
+    key.classList.add('hover');
+    if (i === keybot.length) {
+        key.innerHTML = '<i class="fa-solid fa-delete-left Backspace"></i>';
+        key.classList.add('Backspace');
+    } else {
+        key.textContent = keybot[i];
+        key.classList.add(keybot[i]);
+    }
+    rowbot.append(key);
+}
+
 document.querySelector('button').addEventListener('click', () => {
     gamefinished = false;
     word = list[Math.floor(Math.random() * list.length)].toString().toLowerCase();
@@ -5816,30 +5856,42 @@ document.querySelector('button').addEventListener('click', () => {
     document.querySelectorAll('.key').forEach(key => {
         key.style.backgroundColor = 'rgb(181, 177, 177)';
     })
+    localStorage.setItem('guess0', []);
+    localStorage.setItem('guess1', []);
+    localStorage.setItem('guess2', []);
+    localStorage.setItem('guess3', []);
+    localStorage.setItem('guess4', []);
 })
 
-// if (localStorage.getItem('guess0').length !== 0) {
-//     for (let j = 0; j < 5; j++) {
-//         for (let i = 0; i < 5; i++) {
-//             if (localStorage.getItem('guess' + i) === word[i]) {
-//                 container.children[j].children[i].style.transform = 'rotateY(180deg)';
-//                 container.children[j].children[i].children[0].style.transform = 'rotateY(180deg)';
-//                 container.children[j].children[i].style.background = 'green';
-//                 document.getElementsByClassName(typedword[i])[0].style.background = 'green';
-//             } else if (word.includes(typedword[i]) && typedword.slice(0, i).includes(typedword[i]) === false) {
-//                 container.children[j].children[i].style.transform = 'rotateY(180deg)';
-//                 container.children[j].children[i].children[0].style.transform = 'rotateY(180deg)';
-//                 container.children[j].children[i].style.background = 'orange';
-//                 document.getElementsByClassName(typedword[i])[0].style.background = 'orange';
-//             } else {
-//                 container.children[j].children[i].style.transform = 'rotateY(180deg)';
-//                 container.children[j].children[i].children[0].style.transform = 'rotateY(180deg)';
-//                 container.children[j].children[i].style.background = '#6e6d6a';
-//                 document.getElementsByClassName(typedword[i])[0].style.background = '#6e6d6a';
-//             }
-//         }
-//     }
-// }
+
+for (let j = 0; j < 5; j++) {
+    let currentword = localStorage.getItem('guess' + j);
+    if (currentword.length === 0) {
+        break;
+    }
+    for (let i = 0; i < 5; i++) {
+        if (currentword[i] === word[i]) {
+            container.children[j].children[i].style.transform = 'rotateY(180deg)';
+            container.children[j].children[i].innerHTML = `<p>${currentword[i].toLowerCase()}</p>`;
+            container.children[j].children[i].children[0].style.transform = 'rotateY(180deg)';
+            container.children[j].children[i].style.background = 'green';
+            document.getElementsByClassName(currentword[i])[0].style.background = 'green';
+        } else if (word.includes(currentword[i]) && currentword.slice(0, i).includes(currentword[i]) === false) {
+            container.children[j].children[i].style.transform = 'rotateY(180deg)';
+            container.children[j].children[i].innerHTML = `<p>${currentword[i].toLowerCase()}</p>`;
+            container.children[j].children[i].children[0].style.transform = 'rotateY(180deg)';
+            container.children[j].children[i].style.background = 'orange';
+            document.getElementsByClassName(currentword[i])[0].style.background = 'orange';
+        } else {
+            container.children[j].children[i].style.transform = 'rotateY(180deg)';
+            container.children[j].children[i].innerHTML = `<p>${currentword[i].toLowerCase()}</p>`;
+            container.children[j].children[i].children[0].style.transform = 'rotateY(180deg)';
+            container.children[j].children[i].style.background = '#6e6d6a';
+            document.getElementsByClassName(currentword[i])[0].style.background = '#6e6d6a';
+        }
+    }
+    row = j + 1;
+}
 
 
 let r = /[a-z]/;
@@ -5936,45 +5988,6 @@ const onletter = (key) => {
 
 window.addEventListener('keydown', (e) => onletter(e.key));
 
-//keyboard
-const keyboard = document.getElementById('keyboard');
-const rowtop = document.querySelector('.rowtop');
-const rowmid = document.querySelector('.rowmid');
-const rowbot = document.querySelector('.rowbot');
- 
-let keytop = 'qwertyuiop';
-let keymid = 'asdfghjkl';
-let keybot = ['ENTER', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
-
-for (let i = 0; i < keytop.length; i++) {
-    let key = document.createElement('div');
-    key.textContent = keytop[i];
-    key.classList.add('key');
-    key.classList.add('hover');
-    key.classList.add(keytop[i]);
-    rowtop.append(key);
-}
-for (let i = 0; i < keymid.length; i++) {
-    let key = document.createElement('div');
-    key.textContent = keymid[i];
-    key.classList.add('key');
-    key.classList.add('hover');
-    key.classList.add(keymid[i]);
-    rowmid.append(key);
-}
-for (let i = 0; i < keybot.length + 1; i++) {
-    let key = document.createElement('div');
-    key.classList.add('key');
-    key.classList.add('hover');
-    if (i === keybot.length) {
-        key.innerHTML = '<i class="fa-solid fa-delete-left Backspace"></i>';
-        key.classList.add('Backspace');
-    } else {
-        key.textContent = keybot[i];
-        key.classList.add(keybot[i]);
-    }
-    rowbot.append(key);
-}
 
 document.querySelectorAll('.key').forEach(key => {
     key.addEventListener('click', (e) => {
