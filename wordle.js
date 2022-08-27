@@ -5788,8 +5788,40 @@ if (!localStorage.getItem('guess4')) {
 if (!localStorage.getItem('guess5')) {
     localStorage.setItem('guess5', []);
 }
+if (!localStorage.getItem('wordlecorrect')) {
+    localStorage.setItem('wordlecorrect', 0)
+}
+if (!localStorage.getItem('wordletotal')) {
+    localStorage.setItem('wordletotal', 0);
+}
+if (!localStorage.getItem('wordlewinrate')) {
+    localStorage.setItem('wordlewinrate', 0);
+}
 
 let container = document.querySelector('.container');
+let stats = document.getElementById('stats');
+let statscorrect = document.getElementById('stats_correct');
+let statstotal = document.getElementById('stats_total');
+let statswinrate = document.getElementById('stats_winrate');
+
+statscorrect.textContent = localStorage.getItem('wordlecorrect');
+statstotal.textContent = localStorage.getItem('wordletotal');
+statswinrate.textContent = localStorage.getItem('wordlewinrate') + '%';
+
+document.getElementById('stats_xmark').addEventListener('click', () => {
+    stats.style.display = 'none';
+})
+document.getElementById('statsicon').addEventListener('click', () => {
+    stats.style.display = 'flex';
+})
+document.getElementById('resetbtn').addEventListener('click', () => {
+    statscorrect.textContent = 0;
+    statstotal.textContent = 0;
+    statswinrate.textContent = 0;
+    localStorage.setItem('wordlecorrect', 0);
+    localStorage.setItem('wordletotal', 0);
+    localStorage.setItem('wordlewinrate', 0);
+})
 
 let row = 0;
 let letter = 0;
@@ -5861,6 +5893,7 @@ document.querySelector('button').addEventListener('click', () => {
     localStorage.setItem('guess2', []);
     localStorage.setItem('guess3', []);
     localStorage.setItem('guess4', []);
+    localStorage.setItem('guess5', []);
 })
 
 
@@ -5941,6 +5974,16 @@ const onletter = (key) => {
                         document.getElementById('end').style.display = 'flex';
                         document.getElementById('endp').textContent = 'Congratulations! Word was ' + word;
                         gamefinished = true;
+                        localStorage.setItem('wordlecorrect', localStorage.getItem('wordlecorrect') - -1);
+                        localStorage.setItem('wordletotal', localStorage.getItem('wordletotal') - -1);
+                        let winratepercent = localStorage.getItem('wordlecorrect') / localStorage.getItem('wordletotal') * 100;
+                        if (winratepercent !== 100 && winratepercent.toString().length > 2) {
+                            winratepercent = winratepercent.toString().slice(0, 2);
+                        }
+                        localStorage.setItem('wordlewinrate', winratepercent);
+                        statscorrect.textContent = localStorage.getItem('wordlecorrect');
+                        statstotal.textContent = localStorage.getItem('wordletotal');
+                        statswinrate.textContent = localStorage.getItem('wordlewinrate') + '%';
                     }, 1000);
                     return;
                 }
@@ -5952,6 +5995,15 @@ const onletter = (key) => {
                         document.getElementById('end').style.display = 'flex';
                         document.getElementById('endp').textContent = 'Word was ' + word;
                         gamefinished = true;
+                        localStorage.setItem('wordletotal', localStorage.getItem('wordletotal') - -1);
+                        let winratepercent = localStorage.getItem('wordlecorrect') / localStorage.getItem('wordletotal') * 100;
+                        if (winratepercent !== 100 && winratepercent.toString().length > 2) {
+                            winratepercent = winratepercent.toString().slice(0, 2);
+                        }
+                        localStorage.setItem('wordlewinrate', winratepercent);
+                        statscorrect.textContent = localStorage.getItem('wordlecorrect');
+                        statstotal.textContent = localStorage.getItem('wordletotal');
+                        statswinrate.textContent = localStorage.getItem('wordlewinrate') + '%';
                     }, 1000);
                 }
             } else {
@@ -6002,6 +6054,12 @@ mode.addEventListener('click', () => {
     if (document.querySelector('.mode_ball').classList[1] === 'moderight') {
         document.body.style.background = '#282928';
         document.querySelector('h1').style.color = 'white';
+        document.getElementById('statsicon').style.color = 'white';
+        document.getElementById('stats').style.backgroundColor = '#282928';
+        document.getElementById('stats_title').style.color = 'cyan';
+        document.querySelectorAll('.stats_container').forEach(val => {
+            val.style.color = 'white';
+        })
         document.querySelectorAll('.fa-solid').forEach(fa => {
             fa.style.color = 'white';
         });
@@ -6009,6 +6067,12 @@ mode.addEventListener('click', () => {
     } else {
         document.body.style.background = 'white';
         document.querySelector('h1').style.color = 'black';
+        document.getElementById('statsicon').style.color = 'black';
+        document.getElementById('stats').style.backgroundColor = 'white';
+        document.getElementById('stats_title').style.color = 'blue';
+        document.querySelectorAll('.stats_container').forEach(val => {
+            val.style.color = 'black';
+        })
         document.querySelectorAll('.moonsun').forEach(fa => {
             fa.style.color = 'black';
         });
