@@ -5797,6 +5797,9 @@ if (!localStorage.getItem('wordletotal')) {
 if (!localStorage.getItem('wordlewinrate')) {
     localStorage.setItem('wordlewinrate', 0);
 }
+if (!localStorage.getItem('wordledarklightmode')) {
+    localStorage.setItem('wordledarklightmode', 'light');
+}
 
 let container = document.querySelector('.container');
 let stats = document.getElementById('stats');
@@ -6049,9 +6052,18 @@ document.querySelectorAll('.key').forEach(key => {
 
 const mode = document.getElementById('mode');
 
-mode.addEventListener('click', () => {
+if (localStorage.getItem('wordledarklightmode') === 'dark') {
+    document.querySelector('.mode_ball').classList.remove('moderight');
+    toggledarklightmode();
+} else {
+    document.querySelector('.mode_ball').classList.add('moderight');
+    toggledarklightmode();
+}
+function toggledarklightmode() {
     document.querySelector('.mode_ball').classList.toggle('moderight');
     if (document.querySelector('.mode_ball').classList[1] === 'moderight') {
+        console.log('I ran, mode is dark');
+        localStorage.setItem('wordledarklightmode', 'dark');
         document.body.style.background = '#282928';
         document.querySelector('h1').style.color = 'white';
         document.getElementById('statsicon').style.color = 'white';
@@ -6065,6 +6077,8 @@ mode.addEventListener('click', () => {
         });
         mode.style.border = '2px solid white';
     } else {
+        console.log('I ran, mode is light');
+        localStorage.setItem('wordledarklightmode', 'light');
         document.body.style.background = 'white';
         document.querySelector('h1').style.color = 'black';
         document.getElementById('statsicon').style.color = 'black';
@@ -6078,4 +6092,5 @@ mode.addEventListener('click', () => {
         });
         mode.style.border = '2px solid black';
     }
-})
+}
+mode.addEventListener('click', toggledarklightmode());
