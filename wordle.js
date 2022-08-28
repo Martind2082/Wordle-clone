@@ -6053,16 +6053,15 @@ document.querySelectorAll('.key').forEach(key => {
 const mode = document.getElementById('mode');
 
 if (localStorage.getItem('wordledarklightmode') === 'dark') {
-    document.querySelector('.mode_ball').classList.remove('moderight');
-    toggledarklightmode();
-} else {
     document.querySelector('.mode_ball').classList.add('moderight');
     toggledarklightmode();
+} else {
+    document.querySelector('.mode_ball').classList.remove('moderight');
+    toggledarklightmode();
 }
+//this function runs when user clicks on the icon on top right to toggle dark/light mode
 function toggledarklightmode() {
-    document.querySelector('.mode_ball').classList.toggle('moderight');
     if (document.querySelector('.mode_ball').classList[1] === 'moderight') {
-        console.log('I ran, mode is dark');
         localStorage.setItem('wordledarklightmode', 'dark');
         document.body.style.background = '#282928';
         document.querySelector('h1').style.color = 'white';
@@ -6077,7 +6076,6 @@ function toggledarklightmode() {
         });
         mode.style.border = '2px solid white';
     } else {
-        console.log('I ran, mode is light');
         localStorage.setItem('wordledarklightmode', 'light');
         document.body.style.background = 'white';
         document.querySelector('h1').style.color = 'black';
@@ -6093,4 +6091,7 @@ function toggledarklightmode() {
         mode.style.border = '2px solid black';
     }
 }
-mode.addEventListener('click', toggledarklightmode());
+mode.addEventListener('click', () => {
+    document.querySelector('.mode_ball').classList.toggle('moderight');
+    toggledarklightmode();
+});
