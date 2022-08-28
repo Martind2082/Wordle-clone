@@ -5838,7 +5838,7 @@ const rowbot = document.querySelector('.rowbot');
  
 let keytop = 'qwertyuiop';
 let keymid = 'asdfghjkl';
-let keybot = ['ENTER', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
+let keybot = ['Enter', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
 
 for (let i = 0; i < keytop.length; i++) {
     let key = document.createElement('div');
@@ -5880,9 +5880,9 @@ document.querySelector('button').addEventListener('click', () => {
     document.querySelectorAll('.letter').forEach(letter => {
         if (letter.children[0]) {
             letter.children[0].remove();
-            letter.style.transform = 'rotateY(0deg)';
-            letter.style.backgroundColor = 'rgb(181, 177, 177)';
         }
+        letter.style.transform = 'rotateY(0deg)';
+        letter.style.backgroundColor = 'rgb(181, 177, 177)';
     })
     document.getElementById('end').style.display = 'none';
     document.querySelectorAll('.key').forEach(key => {
