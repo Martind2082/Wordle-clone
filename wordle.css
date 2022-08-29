@@ -47,6 +47,11 @@ h1 {
     color: blue;
     transition: all 500ms ease;
 }
+#statistics_top {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
 .stats_container {
     display: flex;
     flex-direction: column;
@@ -55,8 +60,20 @@ h1 {
     transition: all 500ms ease;
     text-align: center;
 }
-.stats_container p {
+.stats_container--top {
     transition-delay: 0ms;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+.stats_divider {
+    text-align: center;
+    width: 50%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 #resetbtn {
     padding: 0.5rem 1rem;
@@ -275,6 +292,18 @@ p {
     }
     #stats {
         width: 95%;
+    }
+    #statistics_top {
+        flex-direction: column;
+    }
+    .statistics_top--top {
+        margin-bottom: 2rem;
+    }
+    .stats_divider {
+        width: 100%;
+    }
+    .stats_container {
+        width: 50%;
     }
 }
 

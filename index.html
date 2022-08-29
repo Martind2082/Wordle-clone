@@ -28,18 +28,38 @@
     <div id="stats">
         <i id="stats_xmark" class="fa-solid fa-xmark hover"></i>
         <p id="stats_title">Statistics</p>
-        <div style="display: flex; justify-content: space-around; width: 100%;">
-            <div class="stats_container">
-                <p>Total Correct:</p>
-                <div id="stats_correct"></div>
+        <div id="statistics_top">
+            <div class="stats_divider statistics_top--top">
+                <div class="stats_container">
+                    <div class="stats_container--top">
+                        <div>Total</div>
+                        <div>Correct</div>
+                    </div>
+                    <div id="stats_correct"></div>
+                </div>
+                <div class="stats_container">
+                    <div class="stats_container--top">
+                        <div>Total</div>
+                        <div>Played</div>
+                    </div>
+                    <div id="stats_total"></div>
+                </div>
             </div>
-            <div class="stats_container">
-                <p>Total Played:</p>
-                <div id="stats_total"></div>
-            </div>
-            <div class="stats_container">
-                <p>Win Rate:</p>
-                <div id="stats_winrate"></div>
+            <div class="stats_divider">
+                <div class="stats_container">
+                    <div class="stats_container--top">
+                        <div>Win</div>
+                        <div>Rate</div>
+                    </div>
+                    <div id="stats_winrate"></div>
+                </div>
+                <div class="stats_container">
+                    <div class="stats_container--top">
+                        <div>Avg</div>
+                        <div>Guesses</div>
+                    </div>
+                    <div id="stats_avgguess"></div>
+                </div>
             </div>
         </div>
         <button id="resetbtn">Reset</button>

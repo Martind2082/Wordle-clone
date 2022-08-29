@@ -5788,6 +5788,9 @@ if (!localStorage.getItem('guess4')) {
 if (!localStorage.getItem('guess5')) {
     localStorage.setItem('guess5', []);
 }
+if (!localStorage.getItem('guess6')) {
+    localStorage.setItem('guess6', []);
+}
 if (!localStorage.getItem('wordlecorrect')) {
     localStorage.setItem('wordlecorrect', 0)
 }
@@ -5800,16 +5803,21 @@ if (!localStorage.getItem('wordlewinrate')) {
 if (!localStorage.getItem('wordledarklightmode')) {
     localStorage.setItem('wordledarklightmode', 'light');
 }
+if (!localStorage.getItem('wordleavgguess')) {
+    localStorage.setItem('wordleavgguess', 0);
+}
 
 let container = document.querySelector('.container');
 let stats = document.getElementById('stats');
 let statscorrect = document.getElementById('stats_correct');
 let statstotal = document.getElementById('stats_total');
 let statswinrate = document.getElementById('stats_winrate');
+let statsavgguess = document.getElementById('stats_avgguess')
 
 statscorrect.textContent = localStorage.getItem('wordlecorrect');
 statstotal.textContent = localStorage.getItem('wordletotal');
 statswinrate.textContent = localStorage.getItem('wordlewinrate') + '%';
+statsavgguess.textContent = localStorage.getItem('wordleavgguess');
 
 document.getElementById('stats_xmark').addEventListener('click', () => {
     stats.style.display = 'none';
@@ -5821,9 +5829,11 @@ document.getElementById('resetbtn').addEventListener('click', () => {
     statscorrect.textContent = 0;
     statstotal.textContent = 0;
     statswinrate.textContent = 0;
+    statsavgguess.textContent = 0;
     localStorage.setItem('wordlecorrect', 0);
     localStorage.setItem('wordletotal', 0);
     localStorage.setItem('wordlewinrate', 0);
+    localStorage.setItem('wordleavgguess', 0);
 })
 
 let row = 0;
@@ -5897,14 +5907,16 @@ document.querySelector('button').addEventListener('click', () => {
     localStorage.setItem('guess3', []);
     localStorage.setItem('guess4', []);
     localStorage.setItem('guess5', []);
+    localStorage.setItem('guess6', []);
 })
 
 
-for (let j = 0; j < 5; j++) {
+for (let j = 0; j < 6; j++) {
     let currentword = localStorage.getItem('guess' + j);
     if (currentword.length === 0) {
         break;
     }
+    let array = [];
     for (let i = 0; i < 5; i++) {
         if (currentword[i] === word[i]) {
             container.children[j].children[i].style.transform = 'rotateY(180deg)';
@@ -5912,27 +5924,64 @@ for (let j = 0; j < 5; j++) {
             container.children[j].children[i].children[0].style.transform = 'rotateY(180deg)';
             container.children[j].children[i].style.background = 'green';
             document.getElementsByClassName(currentword[i])[0].style.background = 'green';
+            array.push('g');
         } else if (word.includes(currentword[i]) && currentword.slice(0, i).includes(currentword[i]) === false) {
             container.children[j].children[i].style.transform = 'rotateY(180deg)';
             container.children[j].children[i].innerHTML = `<p>${currentword[i].toLowerCase()}</p>`;
             container.children[j].children[i].children[0].style.transform = 'rotateY(180deg)';
             container.children[j].children[i].style.background = 'orange';
-            document.getElementsByClassName(currentword[i])[0].style.background = 'orange';
+            if (document.getElementsByClassName(currentword[i])[0].style.background !== 'green') {
+                document.getElementsByClassName(currentword[i])[0].style.background = 'orange';
+            }
         } else {
             container.children[j].children[i].style.transform = 'rotateY(180deg)';
             container.children[j].children[i].innerHTML = `<p>${currentword[i].toLowerCase()}</p>`;
             container.children[j].children[i].children[0].style.transform = 'rotateY(180deg)';
             container.children[j].children[i].style.background = '#6e6d6a';
-            document.getElementsByClassName(currentword[i])[0].style.background = '#6e6d6a';
+            if (document.getElementsByClassName(currentword[i])[0].style.background !== 'green' && document.getElementsByClassName(currentword[i])[0].style.background !== 'orange') {
+                document.getElementsByClassName(currentword[i])[0].style.background = '#6e6d6a';
+            }
         }
     }
     row = j + 1;
+    if (array.length === 5) {
+        gamefinished = true;
+        localStorage.setItem('wordlecorrect', localStorage.getItem('wordlecorrect') - -1);
+        localStorage.setItem('wordletotal', localStorage.getItem('wordletotal') - -1);
+        let winratepercent = localStorage.getItem('wordlecorrect') / localStorage.getItem('wordletotal') * 100;
+        if (winratepercent !== 100 && winratepercent.toString().length > 2) {
+            winratepercent = winratepercent.toString().slice(0, 2);
+        }
+        localStorage.setItem('wordlewinrate', winratepercent);
+        statscorrect.textContent = localStorage.getItem('wordlecorrect');
+        statstotal.textContent = localStorage.getItem('wordletotal');
+        statswinrate.textContent = localStorage.getItem('wordlewinrate') + '%';
+        setTimeout(() => {
+            document.getElementById('end').style.display = 'flex';
+            document.getElementById('endp').textContent = 'Congratulations! Word was ' + word;
+        }, 1000);
+        break;
+    }
+    if (row === 6) {
+        setTimeout(() => {
+            document.getElementById('end').style.display = 'flex';
+            document.getElementById('endp').textContent = 'Word was ' + word;
+            gamefinished = true;
+            localStorage.setItem('wordletotal', localStorage.getItem('wordletotal') - -1);
+            let winratepercent = localStorage.getItem('wordlecorrect') / localStorage.getItem('wordletotal') * 100;
+            if (winratepercent !== 100 && winratepercent.toString().length > 2) {
+                winratepercent = winratepercent.toString().slice(0, 2);
+            }
+            localStorage.setItem('wordlewinrate', winratepercent);
+            statscorrect.textContent = localStorage.getItem('wordlecorrect');
+            statstotal.textContent = localStorage.getItem('wordletotal');
+            statswinrate.textContent = localStorage.getItem('wordlewinrate') + '%';
+        }, 1000);
+    }
 }
-
 
 let r = /[a-z]/;
 const onletter = (key) => {
-
     if (key === 'Backspace') {
         if (typedword.length === 0) {
             return;
@@ -5944,7 +5993,7 @@ const onletter = (key) => {
         }
     }
     if (key === 'Enter' || key === 'ENTER') {
-        if (container.children[row].children[4].textContent === '' || row === 6 || gamefinished) {
+        if (!container.children[row] || container.children[row].children[4].textContent === '' || row === 6 || gamefinished) {
             return;
         } else {
             if (list.includes(typedword.join(''))) {
@@ -5960,53 +6009,58 @@ const onletter = (key) => {
                         container.children[row].children[i].style.transform = 'rotateY(180deg)';
                         container.children[row].children[i].children[0].style.transform = 'rotateY(180deg)';
                         container.children[row].children[i].style.background = 'orange';
-                        document.getElementsByClassName(typedword[i])[0].style.background = 'orange';
+                        if (document.getElementsByClassName(typedword[i])[0].style.background !== 'green') {
+                            document.getElementsByClassName(typedword[i])[0].style.background = 'orange';
+                        }
                     } else {
                         container.children[row].children[i].style.transform = 'rotateY(180deg)';
                         container.children[row].children[i].children[0].style.transform = 'rotateY(180deg)';
                         container.children[row].children[i].style.background = '#6e6d6a';
-                        document.getElementsByClassName(typedword[i])[0].style.background = '#6e6d6a';
+                        if (document.getElementsByClassName(typedword[i])[0].style.background !== 'green' && document.getElementsByClassName(typedword[i])[0].style.background !== 'orange') {
+                            document.getElementsByClassName(typedword[i])[0].style.background = '#6e6d6a';
+                        }
                     }
                     if (array.length === 5) {
                         gamefinished = true;
                     }
                 }
                 localStorage.setItem('guess' + row, typedword.join(''));
+                //if user gets answer correct or user is on last row (before row++ to make it 6)
+                if (array.length === 5 || row === 5) {
+                    gamefinished = true;
+                    localStorage.setItem('wordlecorrect', localStorage.getItem('wordlecorrect') - -1);
+                    localStorage.setItem('wordletotal', localStorage.getItem('wordletotal') - -1);
+                    let winratepercent = localStorage.getItem('wordlecorrect') / localStorage.getItem('wordletotal') * 100;
+                    if (winratepercent !== 100 && winratepercent.toString().length > 2) {
+                        winratepercent = winratepercent.toString().slice(0, 2);
+                    }
+                    localStorage.setItem('wordlewinrate', winratepercent);
+                    if (localStorage.getItem('wordleavgguess') === '0') {
+                        localStorage.setItem('wordleavgguess', row + 1);
+                    } else {
+                        let answer = (localStorage.getItem('wordleavgguess') - -(row+1)) / 2;
+                        answer = answer.toString().slice(0, 3);
+                        localStorage.setItem('wordleavgguess', answer);
+                    }
+                    statsavgguess.textContent = localStorage.getItem('wordleavgguess');
+                    statscorrect.textContent = localStorage.getItem('wordlecorrect');
+                    statstotal.textContent = localStorage.getItem('wordletotal');
+                    statswinrate.textContent = localStorage.getItem('wordlewinrate') + '%';
+                }
                 if (array.length === 5) {
                     setTimeout(() => {
                         document.getElementById('end').style.display = 'flex';
                         document.getElementById('endp').textContent = 'Congratulations! Word was ' + word;
-                        gamefinished = true;
-                        localStorage.setItem('wordlecorrect', localStorage.getItem('wordlecorrect') - -1);
-                        localStorage.setItem('wordletotal', localStorage.getItem('wordletotal') - -1);
-                        let winratepercent = localStorage.getItem('wordlecorrect') / localStorage.getItem('wordletotal') * 100;
-                        if (winratepercent !== 100 && winratepercent.toString().length > 2) {
-                            winratepercent = winratepercent.toString().slice(0, 2);
-                        }
-                        localStorage.setItem('wordlewinrate', winratepercent);
-                        statscorrect.textContent = localStorage.getItem('wordlecorrect');
-                        statstotal.textContent = localStorage.getItem('wordletotal');
-                        statswinrate.textContent = localStorage.getItem('wordlewinrate') + '%';
                     }, 1000);
                     return;
                 }
                 row++;
                 letter = 0;
                 typedword = [];
-                if (row === 6 && getComputedStyle(document.getElementById('end')).display === 'none') {
+                if (row === 6) {
                     setTimeout(() => {
                         document.getElementById('end').style.display = 'flex';
                         document.getElementById('endp').textContent = 'Word was ' + word;
-                        gamefinished = true;
-                        localStorage.setItem('wordletotal', localStorage.getItem('wordletotal') - -1);
-                        let winratepercent = localStorage.getItem('wordlecorrect') / localStorage.getItem('wordletotal') * 100;
-                        if (winratepercent !== 100 && winratepercent.toString().length > 2) {
-                            winratepercent = winratepercent.toString().slice(0, 2);
-                        }
-                        localStorage.setItem('wordlewinrate', winratepercent);
-                        statscorrect.textContent = localStorage.getItem('wordlecorrect');
-                        statstotal.textContent = localStorage.getItem('wordletotal');
-                        statswinrate.textContent = localStorage.getItem('wordlewinrate') + '%';
                     }, 1000);
                 }
             } else {
