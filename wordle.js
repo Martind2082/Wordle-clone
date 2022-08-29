@@ -5764,7 +5764,7 @@ const list = [
 
 let word;
 if (!localStorage.getItem('word')) {
-    word = list[Math.floor(Math.random() * list.length)].toString().toLowerCase();
+    word = Math.floor(Math.random() * list.length)
     localStorage.setItem('word', word);
 } else {
     word = localStorage.getItem('word');
@@ -5885,7 +5885,7 @@ for (let i = 0; i < keybot.length + 1; i++) {
 
 document.querySelector('button').addEventListener('click', () => {
     gamefinished = false;
-    word = list[Math.floor(Math.random() * list.length)].toString().toLowerCase();
+    word = Math.floor(Math.random() * list.length);
     localStorage.setItem('word', word);
     row = 0;
     letter = 0;
@@ -5918,14 +5918,15 @@ for (let j = 0; j < 6; j++) {
     }
     let array = [];
     for (let i = 0; i < 5; i++) {
-        if (currentword[i] === word[i]) {
+        console.log(word);
+        if (currentword[i] === list[word][i]) {
             container.children[j].children[i].style.transform = 'rotateY(180deg)';
             container.children[j].children[i].innerHTML = `<p>${currentword[i].toLowerCase()}</p>`;
             container.children[j].children[i].children[0].style.transform = 'rotateY(180deg)';
             container.children[j].children[i].style.background = 'green';
             document.getElementsByClassName(currentword[i])[0].style.background = 'green';
             array.push('g');
-        } else if (word.includes(currentword[i]) && currentword.slice(0, i).includes(currentword[i]) === false) {
+        } else if (list[word].includes(currentword[i]) && currentword.slice(0, i).includes(currentword[i]) === false) {
             container.children[j].children[i].style.transform = 'rotateY(180deg)';
             container.children[j].children[i].innerHTML = `<p>${currentword[i].toLowerCase()}</p>`;
             container.children[j].children[i].children[0].style.transform = 'rotateY(180deg)';
@@ -5958,14 +5959,14 @@ for (let j = 0; j < 6; j++) {
         statswinrate.textContent = localStorage.getItem('wordlewinrate') + '%';
         setTimeout(() => {
             document.getElementById('end').style.display = 'flex';
-            document.getElementById('endp').textContent = 'Congratulations! Word was ' + word;
+            document.getElementById('endp').textContent = 'Congratulations! Word was ' + list[word];
         }, 1000);
         break;
     }
     if (row === 6) {
         setTimeout(() => {
             document.getElementById('end').style.display = 'flex';
-            document.getElementById('endp').textContent = 'Word was ' + word;
+            document.getElementById('endp').textContent = 'Word was ' + list[word];
             gamefinished = true;
             localStorage.setItem('wordletotal', localStorage.getItem('wordletotal') - -1);
             let winratepercent = localStorage.getItem('wordlecorrect') / localStorage.getItem('wordletotal') * 100;
@@ -5999,13 +6000,13 @@ const onletter = (key) => {
             if (list.includes(typedword.join(''))) {
                 let array = [];
                 for (let i = 0; i < 5; i++) {
-                    if (typedword[i] === word[i]) {
+                    if (typedword[i] === list[word][i]) {
                         container.children[row].children[i].style.transform = 'rotateY(180deg)';
                         container.children[row].children[i].children[0].style.transform = 'rotateY(180deg)';
                         container.children[row].children[i].style.background = 'green';
                         document.getElementsByClassName(typedword[i])[0].style.background = 'green';
                         array.push('g');
-                    } else if (word.includes(typedword[i]) && typedword.slice(0, i).includes(typedword[i]) === false) {
+                    } else if (list[word].includes(typedword[i]) && typedword.slice(0, i).includes(typedword[i]) === false) {
                         container.children[row].children[i].style.transform = 'rotateY(180deg)';
                         container.children[row].children[i].children[0].style.transform = 'rotateY(180deg)';
                         container.children[row].children[i].style.background = 'orange';
@@ -6050,7 +6051,7 @@ const onletter = (key) => {
                 if (array.length === 5) {
                     setTimeout(() => {
                         document.getElementById('end').style.display = 'flex';
-                        document.getElementById('endp').textContent = 'Congratulations! Word was ' + word;
+                        document.getElementById('endp').textContent = 'Congratulations! Word was ' + list[word];
                     }, 1000);
                     return;
                 }
@@ -6060,7 +6061,7 @@ const onletter = (key) => {
                 if (row === 6) {
                     setTimeout(() => {
                         document.getElementById('end').style.display = 'flex';
-                        document.getElementById('endp').textContent = 'Word was ' + word;
+                        document.getElementById('endp').textContent = 'Word was ' + list[word];
                     }, 1000);
                 }
             } else {
