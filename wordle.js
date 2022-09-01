@@ -5918,7 +5918,6 @@ for (let j = 0; j < 6; j++) {
     }
     let array = [];
     for (let i = 0; i < 5; i++) {
-        console.log(word);
         if (currentword[i] === list[word][i]) {
             container.children[j].children[i].style.transform = 'rotateY(180deg)';
             container.children[j].children[i].innerHTML = `<p>${currentword[i].toLowerCase()}</p>`;
