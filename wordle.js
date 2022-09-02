@@ -5762,6 +5762,7 @@ const list = [
   ]
 
 
+
 let word;
 if (!localStorage.getItem('word')) {
     word = Math.floor(Math.random() * list.length)
@@ -6008,9 +6009,11 @@ const onletter = (key) => {
                     } else if (list[word].includes(typedword[i]) && typedword.slice(0, i).includes(typedword[i]) === false) {
                         container.children[row].children[i].style.transform = 'rotateY(180deg)';
                         container.children[row].children[i].children[0].style.transform = 'rotateY(180deg)';
-                        container.children[row].children[i].style.background = 'orange';
                         if (document.getElementsByClassName(typedword[i])[0].style.background !== 'green') {
                             document.getElementsByClassName(typedword[i])[0].style.background = 'orange';
+                            container.children[row].children[i].style.background = 'orange';
+                        } else {
+                            container.children[row].children[i].style.background = '#6e6d6a';
                         }
                     } else {
                         container.children[row].children[i].style.transform = 'rotateY(180deg)';
