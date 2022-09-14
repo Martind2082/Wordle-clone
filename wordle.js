@@ -5933,6 +5933,9 @@ for (let j = 0; j < 6; j++) {
             container.children[j].children[i].style.background = 'orange';
             if (document.getElementsByClassName(currentword[i])[0].style.background !== 'green') {
                 document.getElementsByClassName(currentword[i])[0].style.background = 'orange';
+                container.children[row].children[i].style.background = 'orange';
+            } else {
+                container.children[row].children[i].style.background = '#6e6d6a';
             }
         } else {
             container.children[j].children[i].style.transform = 'rotateY(180deg)';
@@ -6030,8 +6033,11 @@ const onletter = (key) => {
                 localStorage.setItem('guess' + row, typedword.join(''));
                 //if user gets answer correct or user is on last row (before row++ to make it 6)
                 if (array.length === 5 || row === 5) {
+                    console.log('game ended');
                     gamefinished = true;
-                    localStorage.setItem('wordlecorrect', localStorage.getItem('wordlecorrect') - -1);
+                    if (array.length === 5) {
+                        localStorage.setItem('wordlecorrect', localStorage.getItem('wordlecorrect') - -1);
+                    }
                     localStorage.setItem('wordletotal', localStorage.getItem('wordletotal') - -1);
                     let winratepercent = localStorage.getItem('wordlecorrect') / localStorage.getItem('wordletotal') * 100;
                     if (winratepercent !== 100 && winratepercent.toString().length > 2) {
@@ -6051,6 +6057,7 @@ const onletter = (key) => {
                     statswinrate.textContent = localStorage.getItem('wordlewinrate') + '%';
                 }
                 if (array.length === 5) {
+                    console.log('u won');
                     setTimeout(() => {
                         document.getElementById('end').style.display = 'flex';
                         document.getElementById('endp').textContent = 'Congratulations! Word was ' + list[word];
@@ -6061,6 +6068,7 @@ const onletter = (key) => {
                 letter = 0;
                 typedword = [];
                 if (row === 6) {
+                    console.log('u lost');
                     setTimeout(() => {
                         document.getElementById('end').style.display = 'flex';
                         document.getElementById('endp').textContent = 'Word was ' + list[word];
@@ -6125,6 +6133,8 @@ function toggledarklightmode() {
         document.getElementById('statsicon').style.color = 'white';
         document.getElementById('stats').style.backgroundColor = '#282928';
         document.getElementById('stats_title').style.color = 'cyan';
+        document.getElementById('endp').style.color = 'white';
+        document.getElementById('end').style.background = 'rgb(25, 25, 24)';
         document.querySelectorAll('.stats_container').forEach(val => {
             val.style.color = 'white';
         })
