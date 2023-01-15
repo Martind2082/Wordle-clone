@@ -6155,6 +6155,7 @@ function toggledarklightmode() {
         document.querySelectorAll('.moonsun').forEach(fa => {
             fa.style.color = 'black';
         });
+        document.querySelector('#stats_xmark').style.color = 'black';
         mode.style.border = '2px solid black';
     }
 }
