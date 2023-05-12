@@ -6078,6 +6078,13 @@ const onletter = (key) => {
                 let popup = document.createElement('div');
                 popup.classList.add('popup');
                 popup.textContent = 'Word not found';
+                if (document.body.children[7] && document.body.children[7].textContent) {
+                    container.children[row].classList.add('shake');
+                    setTimeout(() => {
+                        container.children[row].classList.remove('shake');
+                    }, 800);
+                    return;
+                }
                 document.body.append(popup);
                 setTimeout(() => {
                     popup.remove();
